@@ -172,7 +172,31 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 #### 2. Read Existing To Do's
 
-...
+Now that we're all adept with test-driven development, we can jump right into our next chapter, which will involve reading and returning existing To Do's as a JSON response. As with the previous chapter, we should start off thinking of what we require in our Arrange step. In order to return existing To Do's ... we need existing To Do's, so let's create them.
+
+Laravel offers a concept called [Model Factories](https://laravel.com/docs/9.x/database-testing#defining-model-factories) to help us quickly generate fake models, [persisted to the database](https://laravel.com/docs/9.x/database-testing#creating-models-using-factories) or [in memory](https://laravel.com/docs/9.x/database-testing#instantiating-models), to use in our tests. A factory has already been defined for our ToDo model, so we can use that to create a few ToDo models during the Arrange step of our test. Now that we have persisted a handful of To Do's to the storage, we can move on to the Act step.
+
+As with the previous chapter's Act step, we are again going to make an HTTP request. This time it will be to the route that would normally be responsible for listing out resources. *See if you can figure out which one that is.*. With that we have completed the Act step.
+
+Finally, we will make any assertions to prove our expected flow has completed successfully. This time around we don't want to assert that we have received a `201 Created` response since we are not expecting to create a new To Do. This time around we are hoping to receive a `200 OK` response. The purpose behind fetching a listing of To Do's in this application is to display them to the end-user, so we will want to make sure we are sending back the To Do's we created in the Arrange step in a structure that makes the most sense. Once again Laravel's built in testing utilies offers an easy way to do this.
+
+Whew! We're already done writing that test, that one flew by so fast! Now that we have our test, it's time to run it. You can accomplish this with the following command:
+
+```bash
+./develop artisan test --filter testCanReadExistingToDos
+```
+
+It should be no surprise that this has resulted in a failure, right? ... Good. This should be a familiar error as it's the first one we ran into last time. We need to define our route, so it's back to `routes/api.php` we go.
+
+Now that we have defined our route and re-run our tests we notice that we've skipped right over our response status assertion. Why did that happen ![wut](/resources/images/wut.jpg)? Under the hood, Laravel converts the return value from a controller into a response if it isn't already one. That means you *could* return a multitude of different values. In this case, a void return will result in an empty `200 OK` response. With that out of the way, we are now able to see that we're not matching the expected JSON structure. Let's set up a response with some fake data in the same manner as the previous chapter.
+
+Wonderful, now that we're returning the expected structure, we can see that we're missing the actual expected values. Let's go ahead and retrieve the To Do's from storage that we're expecting and return them in the response.
+
+You may or may not have run into an error stating that we are not returning a boolean for the completed attribute (depending on how you wrote your test and your controller action). This is a good opportunity to tell our ToDo model to [cast the completed attribute to a boolean](https://laravel.com/docs/9.x/eloquent-mutators#attribute-casting), so we don't have to do this manually.
+
+Oh heck ya bud! That chapter flew by so fast! Congratulations on completing another chapter.
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/reading-existing-to-dos`.
 
 #### 3. Update an Existing To Do
 
