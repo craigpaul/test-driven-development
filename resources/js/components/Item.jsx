@@ -1,6 +1,6 @@
 function Item({ item }) {
-  const inputId = `item-${item.id}`
-  const labelId = `${inputId}-label`
+  const inputId = `item-${item.id}`;
+  const labelId = `${inputId}-label`;
 
   return (
     <li
