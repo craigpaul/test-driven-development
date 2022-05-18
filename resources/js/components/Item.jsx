@@ -1,21 +1,24 @@
 function Item({ item }) {
+  const inputId = `item-${item.id}`
+  const labelId = `${inputId}-label`
+
   return (
     <li
-      aria-labelledby={`todo-${item.id}-label`}
+      aria-labelledby={labelId}
       className="group flex items-center justify-between border-t border-gray-200 py-4"
-      key={item.id}
     >
       <div className="flex items-center">
         <div className="mx-4">
           <input
-            className="peer sr-only"
+            className="sr-only"
             defaultChecked={item.completed}
-            id={`todo-${item.id}`}
+            id={inputId}
             type="checkbox"
           />
           <label
-            className="flex h-6 w-6 cursor-pointer rounded-full border border-gray-200 text-lime-500 peer-checked:border-lime-400"
-            htmlFor={`todo-${item.id}`}
+            aria-hidden="true"
+            className={`flex h-6 w-6 cursor-pointer rounded-full border border-gray-200 text-lime-500 ${item.completed ? 'border-lime-500' : null}`}
+            htmlFor={inputId}
           >
             {item.completed ? (
               <svg
@@ -37,17 +40,19 @@ function Item({ item }) {
         </div>
         <div
           className={item.completed ? 'text-gray-300 line-through' : null}
-          id={`todo-${item.id}-label`}
+          id={labelId}
         >
           {item.title}
         </div>
       </div>
       <div className="mr-4 flex">
         <button
+          aria-label="Delete"
           className="text-gray-300 opacity-0 focus:opacity-100 focus:outline-none group-hover:opacity-100"
           type="button"
         >
           <svg
+            aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"

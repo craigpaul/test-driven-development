@@ -8,7 +8,7 @@ function List() {
     <section className="w-full">
       <ul className="font-light text-gray-400">
         {items.map((item) => (
-          <Item item={item} />
+          <Item key={item.id} item={item} />
         ))}
       </ul>
     </section>
