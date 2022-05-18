@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 function Item({ item }) {
   const inputId = `item-${item.id}`;
   const labelId = `${inputId}-label`;
@@ -17,7 +19,10 @@ function Item({ item }) {
           />
           <label
             aria-hidden="true"
-            className={`flex h-6 w-6 cursor-pointer rounded-full border border-gray-200 text-lime-500 ${item.completed ? 'border-lime-500' : null}`}
+            className={clsx(
+              'flex h-6 w-6 cursor-pointer rounded-full border border-gray-200 text-lime-500',
+              item.completed ? 'border-lime-500' : null,
+            )}
             htmlFor={inputId}
           >
             {item.completed ? (
