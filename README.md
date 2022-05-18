@@ -168,7 +168,7 @@ We've now arrived at our last error (for now). This exception tells us that noth
 
 Boom! That is the whole test-driven development process successfully completed! Now you might be saying, hold on a second there ... we're still returning fake data from the endpoint, and you'd be correct. Now I want you to take a second to figure out how you can prove that we're receiving the correct information back in the response before we call this endpoint a success and move onto the next one. Great job!
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to [BRANCH NAME].
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/creating-a-new-to-do`.
 
 #### 2. Read Existing To Do's
 
