@@ -1,8 +1,8 @@
-## Test Driven Development
+# Test Driven Development
 
-### Setup
+## Setup
 
-#### Environment
+### Environment
 
 Before anything else, make sure to copy the `.env.example` file to `.env`.
 
@@ -10,7 +10,7 @@ Before anything else, make sure to copy the `.env.example` file to `.env`.
 cp .env.example .env
 ```
 
-#### Dependencies
+### Dependencies
 
 Next up, we will need to install our PHP dependencies so we can kick off our Docker environment (based on [Laravel Sail](https://laravel.com/docs/9.x/sail)).
 
@@ -42,7 +42,7 @@ Before we move onto setting up the database, let's take a second to compile our 
 ./develop yarn dev
 ```
 
-#### Database
+### Database
 
 As part of our Docker setup, we included a MariaDB database. Let's run our migrations now in order to populate the correct database schema. Open your terminal and change into the root directory of this application.
 
@@ -50,6 +50,20 @@ As part of our Docker setup, we included a MariaDB database. Let's run our migra
 ./develop artisan migrate
 ```
 
-#### Preview
+### Preview
 
 Lastly, let's take a quick look at the initial state of the application in the browser. If you've followed up to this point, you should be able to open up a browser and navigate to [http://localhost/](http://localhost/). You should see a box with a text input that states "What needs to be done?" in front of you. With that, we are good to start.
+
+## Project
+
+The project that we will be building is an incredibly simplified version of [TodoMVC](https://todomvc.com/), which if it's not obvious, is a To Do list application. 
+
+We will be going through building out the server side endpoints to handle our database interactions (creating, reading, updating, deleting) and returning usable data to the frontend. Following that we will be building out the interactions on the frontend (the UI is already pre-built to save time, you just have to assemble it ... ![Ikea](/resources/images/ikea.png) !).
+
+### Laravel and PHPUnit
+
+...
+
+### React and Testing Library / Jest
+
+...
