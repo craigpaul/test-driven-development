@@ -1,0 +1,20 @@
+{
+    "test": ".jsx?$",
+    "jsc": {
+        "parser": {
+            "syntax": "ecmascript",
+            "jsx": true,
+            "decorators": false,
+            "dynamicImport": false
+        },
+        "transform": {
+            "react": {
+                "pragma": "__jsx",
+                "throwIfNamespace": true,
+                "development": false,
+                "useBuiltins": false,
+                "runtime": "automatic"
+            }
+        }
+    }
+}
