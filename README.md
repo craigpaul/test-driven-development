@@ -29,6 +29,14 @@ First thing we need to do before setting up our application is that we need to m
 cp .env.example .env
 ```
 
+After that we will also want to introduce a testing specific `.env` file called `.env.testing`. Doing this will [tell Laravel to use a specific set of environment variables when running tests](https://laravel.com/docs/9.x/testing#the-env-testing-environment-file) vs the environment variables used when accessing the application through a browser.
+
+```bash
+cp .env.example .env.testing
+```
+
+Before we can continue, you will need to make one small change to the `.env.testing` file. Our Docker environment will automatically create a database for testing purposes called `testing`, so we need to make sure that file will utilize the correct database. Replace `DB_DATABASE=test_driven_development` within `.env.testing` with `DB_DATABASE=testing`.
+
 ### Dependencies
 
 Next up, we will need to install our PHP dependencies so we can kick off our Docker environment (based on [Laravel Sail](https://laravel.com/docs/9.x/sail)).
@@ -69,6 +77,12 @@ As part of our Docker setup, we included a MariaDB database. Let's run our migra
 ./develop artisan migrate
 ```
 
+In addition to migrating that database, we will need to migrate the testing database, which can be accomplised by running the following command:
+
+```bash
+./develop artisan migrate --env=testing
+```
+
 ### Preview
 
 Lastly, let's take a quick look at the initial state of the application in the browser. If you've followed up to this point, you should be able to open up a browser and navigate to [http://localhost/](http://localhost/). You should see a box with a text input that states "What needs to be done?" in front of you. With that, we are good to start.
@@ -77,7 +91,7 @@ Lastly, let's take a quick look at the initial state of the application in the b
 
 The project that we will be building is an incredibly simplified version of [TodoMVC](https://todomvc.com/), which if it's not obvious, is a To Do list application. 
 
-We will be going through building out the server side endpoints to handle our database interactions (creating, reading, updating, deleting) and returning usable data to the frontend. Following that we will be building out the interactions on the frontend (the UI is already pre-built to save time, you just have to assemble it ... ![Ikea](/resources/images/ikea.png) !).
+We will be going through building out the server side endpoints to handle our database interactions (creating, reading, updating, deleting) and returning usable data to the front-end. Following that we will be building out the interactions on the front-end (the UI is already pre-built to save time, you just have to assemble it ... ![Ikea](/resources/images/ikea.png) !).
 
 ### Why We Test?
 
@@ -111,7 +125,50 @@ After that is complete, we will work on implementing the front-end interactions 
 
 #### 1. Creating a New To Do
 
-...
+Before we jump into writing any code, let's first take a look at the general structure of [the pre-existing test file](/tests/Feature/CanPerformVariousActionsWithToDosTest.php). Each test lays out an expected case that we are wanting to cover, and does so with a specific format called [Arrange, Act, Assert](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/). This is an incredibly powerful (but simple) pattern for writing *good* tests. The process follows a very prescribed order of operations, such as the following:
+
+1. Arrange inputs and targets. Arrange steps should set up the test case. Does the test require any objects or special settings? Does it need to prep a database? Does it need to log into a web app? Handle all of these operations at the start of the test.
+
+2. Act on the target behavior. Act steps should cover the main thing to be tested. This could be calling a function or method, calling a REST API, or interacting with a web page. Keep actions focused on the target behavior.
+
+3. Assert expected outcomes. Act steps should elicit some sort of response. 
+Assert steps verify the goodness or badness of that response. Sometimes, assertions are as simple as checking numeric or string values. Other times, they may require checking multiple facets of a system. Assertions will ultimately determine if the test passes or fails.
+
+With that out of the way, let's get down to writing our first test. When thinking in an Arrange, Act, Assert fashion for "creating a new to do", the easiest place to start is probably with the idea of "what makes up a To Do". If we look at [the model](/app/Models/ToDo.php) and [the migration](/database/migrations/2022_05_18_121643_create_to_dos_table.php) we can see that it has two main attributes, a string title to hold the user provided action to take place and flag representing whether it has been completed or not. It does not make sense that a new To Do would already be completed, so we would only want to be supplying the title of the To Do when we are creating it. 
+
+In order to do this, we will want the ability to generate fake data. Laravel offer's a `WithFaker` trait out of the box that you can attach to this class to have access to [FakerPHP](https://fakerphp.github.io/). *Be aware of the type being returned from FakerPHP as we will want a string, but depending what you chose, you might need to instruct FakerPHP to give you a string through the use of a method argument.* Now that we have a fake To Do title we can utilize, we have completed our Arrange step.
+
+Next up, we will fill out our Act step. In a typical Feature/Integration test within Laravel, the Act step will usually contain code to make an HTTP request in the same manner that a user would be triggering from their end. For our purposes, we want to make a POST request with some information to an endpoint that will be used to create a new To Do. Laravel exposes an [easy way to reference routes](https://laravel.com/docs/9.x/routing#generating-urls-to-named-routes) by a static [string-based name](https://laravel.com/docs/9.x/routing#named-routes). We will use a conventional name and define the route later once we have finished the writing the test. With that, we have completed our Act step.
+
+Finally, we will make any assertions to prove our expected flow has completed successfully. When we are talking about APIs and the contracts they form between the backend and the front-end, an important item to keep in mind is the status code returned from the server. Being the good developers we are, we will want to signal to the application that a To Do has indeed been created by asserting that the status returned with the response was a `201 Created` using a helpful method provided off of the `TestResponse` returned to us when we made the request. The front-end will likely want to receive an updated set of attributes once we've created the new To Do, so we should add an assertion that we have returned some JSON matching a format that we deem will work. The last thing we will want to verify is that a record was indeed stored with the expected attributes. Once again Laravel's built in testing utilies offers an easy way to do this.
+
+Congratulations, you've (maybe) just finished writing your first test in a test-driven development fashion. Now that we have our test, it's time to run it. You can accomplish this with the following command:
+
+```bash
+./develop artisan test --filter testCanCreateNewToDo
+```
+
+Oh no, a failing test ![Ahhhhhhhhh](/resources/images/ahhhhhhhhh.gif)! That's ok, it was completely expected. This is actually a core tenant of how test-driven development is executed. Write a failing test, run the test, write the code to make it pass. Let's take a look at the error and see what we can do to move past it.
+
+Our initial error is saying that the route we've provided to the `postJson` method doesn't exist, so let's define it now. In `routes/api.php` we can [define a route matching the name](https://laravel.com/docs/9.x/routing#named-routes) that we provided in the test with an action. What is an action you ask? That is the controller that will be handling incoming requests to that endpoint. Before we define this route, we might as well take a moment to create a controller that this endpoint can use. Using the artisan command line interface you can automatically generate a controller by opening your terminal and typing the following command:
+
+```bash
+./develop artisan make:controller ToDoController -r
+```
+
+Take notice of the `-r` option being provided in the above command. This will generate a controller stub with methods corresponding to the various RESTful verbs. For now, just know that we won't require all these methods to fill out this controller, so you can remove the `create`, `show`, and `edit` methods. *One more thing to note is that the generated controller stub contains [a reference to a parent class](https://laravel.com/docs/9.x/controllers#basic-controllers) that does not exist in this application. You can safely remove this extension as we will not need any features that the parent class usually provides.*.
+
+Now we can safely provide the action for our new route. Let's point this route to the store method on the ToDoController and give our test another run to see where we are at.
+
+Our next error states that we aren't returning a `201 Created` response, but rather a `200 OK`. We can resolve that by returning [a JSON response](https://laravel.com/docs/9.x/responses#json-responses) with [a specific status](https://laravel.com/docs/9.x/responses#response-objects) matching the one we expect.
+
+Now we are seeing that we have passed the incorrect status error, but are running into a new error stating that our response structure doesn't match. For now, we can supply fake data matching the expected structure to move past this issue.
+
+We've now arrived at our last error (for now). This exception tells us that nothing in our database matches the attributes we supplied in the test. We can now utilize our [Eloquent Model to insert the provided information](https://laravel.com/docs/9.x/eloquent#inserts) into the database.
+
+Boom! That is the whole test-driven development process successfully completed! Now you might be saying, hold on a second there ... we're still returning fake data from the endpoint, and you'd be correct. Now I want you to take a second to figure out how you can prove that we're receiving the correct information back in the response before we call this endpoint a success and move onto the next one. Great job!
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to [BRANCH NAME].
 
 #### 2. Read Existing To Do's
 
