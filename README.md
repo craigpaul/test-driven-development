@@ -62,8 +62,36 @@ We will be going through building out the server side endpoints to handle our da
 
 ### Laravel and PHPUnit
 
+#### 1. Creating a New To Do
+
+...
+
+#### 2. Read Existing To Do's
+
+...
+
+#### 3. Update an Existing To Do
+
+...
+
+#### 4. Delete an Existing To Do
+
 ...
 
 ### React and Testing Library / Jest
+
+#### 1. Creating a New To Do
+
+...
+
+#### 2. Display Existing To Do's
+
+...
+
+#### 3. Mark an Existing To Do as Completed
+
+...
+
+#### 4. Delete an Existing To Do
 
 ...
