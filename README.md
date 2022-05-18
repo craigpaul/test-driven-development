@@ -50,7 +50,6 @@ As part of our Docker setup, we included a MariaDB database. Let's run our migra
 ./develop artisan migrate
 ```
 
-
 #### Preview
 
 Lastly, let's take a quick look at the initial state of the application in the browser. If you've followed up to this point, you should be able to open up a browser and navigate to [http://localhost/](http://localhost/). You should see a box with a text input that states "What needs to be done?" in front of you. With that, we are good to start.
