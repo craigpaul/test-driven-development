@@ -4,9 +4,12 @@
         <meta charset="utf-8">
         <title>To-Dos</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <link rel="icon" href="/favicon.ico" />
+        <link href="/favicon.ico" rel="icon" />
+        <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
+        <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
     </head>
     <body>
         <div id="root"></div>
+        <script src="{{ mix('/js/app.js') }}"></script>
     </body>
 </html>
