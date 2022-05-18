@@ -1,10 +1,29 @@
-# Test Driven Development
+# Test-Driven Development
+
+## Prerequisites
+
+Before proceeding, please be sure you have the following software installed on your device.
+
+- PHP (minimum of v8.0.2)
+- Composer (minimum of v2.0)
+
+You can verify both of these are installed by opening up a terminal window and typing the following commands.
+
+```bash
+php --version
+```
+
+```bash
+composer --version
+```
+
+If you see any errors, please be sure to rectify those before proceeding.
 
 ## Setup
 
 ### Environment
 
-Before anything else, make sure to copy the `.env.example` file to `.env`.
+First thing we need to do before setting up our application is that we need to make sure to copy the `.env.example` file to `.env`.
 
 ```bash
 cp .env.example .env
