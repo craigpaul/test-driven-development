@@ -30,23 +30,21 @@ After this has finished building, you will want to install your JavaScript depen
 ./develop yarn
 ```
 
+Before we move onto setting up the database, let's take a second to compile our static assets. *You can use either `dev` or `watch` here, depending on what you want to do. The `watch` command will continually recompile your changes, should you have the desire to keep checking your progress via the browser.*.
+
+```bash
+./develop yarn dev
+```
+
 #### Database
 
-We will need a database in order to store our data. For the purposes of this application, SQLite will fulfill our needs. Take note of the following environment variables in the `.env.example` file.
-
-```ini
-DB_CONNECTION=sqlite
-DB_DATABASE=./database/test-driven-development.sqlite
-```
-
-Let's create this database file and run our migrations. Open your terminal and change into the root directory of this application.
+As part of our Docker setup, we included a MariaDB database. Let's run our migrations now in order to populate the correct database schema. Open your terminal and change into the root directory of this application.
 
 ```bash
-touch database/test-driven-development.sqlite
+./develop artisan migrate
 ```
 
-Next, make sure to update your local .env file to match the correct path and connection name if it doesn't already. After that we can run our migrations.
 
-```bash
-php artisan migrate
-```
+#### Preview
+
+Lastly, let's take a quick look at the initial state of the application in the browser. If you've followed up to this point, you should be able to open up a browser and navigate to [http://localhost/](http://localhost/). You should see a box with a text input that states "What needs to be done?" in front of you. With that, we are good to start.
