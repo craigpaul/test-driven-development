@@ -30,7 +30,12 @@ class ToDoController
      */
     public function index()
     {
-        //
+        $toDos = $this->toDo
+            ->newQuery()
+            ->select(['id', 'title', 'completed'])
+            ->get();
+
+        return $this->response->json($toDos);
     }
 
     /**
@@ -48,7 +53,7 @@ class ToDoController
         return $this->response->json([
             'id' => $toDo->getKey(),
             'title' => $toDo->title,
-            'completed' => (bool) $toDo->completed,
+            'completed' => $toDo->completed,
         ], Response::HTTP_CREATED);
     }
 

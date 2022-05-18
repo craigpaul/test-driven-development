@@ -40,11 +40,26 @@ class CanPerformVariousActionsWithToDosTest extends TestCase
 
     public function testCanReadExistingToDos()
     {
-        // Arrange
+        $toDos = ToDo::factory()->count(3)->create();
 
-        // Act
+        $response = $this->withoutExceptionHandling()
+            ->getJson(route('to-dos.index'))
+            ->assertOk()
+            ->assertJsonStructure([
+                [
+                    'id',
+                    'title',
+                    'completed',
+                ],
+            ]);
 
-        // Assert
+        foreach ($toDos as $toDo) {
+            $response->assertJsonFragment([
+                'id' => $toDo->getKey(),
+                'title' => $toDo->title,
+                'completed' => (bool) $toDo->completed,
+            ]);
+        }
     }
 
     public function testCanUpdateExistingToDo()
