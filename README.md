@@ -18,6 +18,12 @@ Next up, we will need to install our PHP dependencies so we can kick off our Doc
 composer install -o
 ```
 
+Before continuing with our Docker build, we need to ensure Laravel has an application key set up in our `.env` file.
+
+```bash
+php artisan key:generate
+```
+
 Once that is complete, you will want to kick off the Docker build steps. Included in this repository is a `develop` script to allow for a similar access pattern to the underlying Docker resources as in other repositories within the Coconut Software organization.
 
 ```bash
