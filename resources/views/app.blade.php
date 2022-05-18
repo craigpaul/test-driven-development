@@ -8,7 +8,7 @@
         <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
     </head>
-    <body class="h-full min-h-full">
+    <body class="h-full min-h-full font-sans">
         <div class="h-full min-h-full bg-gray-100" id="root"></div>
         <script src="{{ mix('/js/app.js') }}"></script>
     </body>
