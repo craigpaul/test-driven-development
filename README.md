@@ -79,6 +79,34 @@ The project that we will be building is an incredibly simplified version of [Tod
 
 We will be going through building out the server side endpoints to handle our database interactions (creating, reading, updating, deleting) and returning usable data to the frontend. Following that we will be building out the interactions on the frontend (the UI is already pre-built to save time, you just have to assemble it ... ![Ikea](/resources/images/ikea.png) !).
 
+### Why We Test?
+
+By writing automated tests for our application code, we prove that our code does what we want it to do. Tests help us prevent simply errors such as syntax issues from slipping through the cracks. Going forward, these tests can act as documentation to other developers (and yourself when you eventually forget 🤪) so they can understand how parts of the system they might not work on should behave.
+
+Well written tests provide us with huge safety nets when it comes to doing our job. We can feel confident in refactoring our code (changing the inner workings of any given system) without breaking the expected output of the code we are changing.
+
+A huge benefit of having a good test suite is that it can reduce cognitive overhead, meaning if we can prove that the code is doing what it should be doing, we don't have to constantly keep that functionality front of mind, if we break it by changing something else, our test suite will let us know.
+
+### Types of Tests
+
+There are many different types of tests you can reach for when it comes to automated software testing. We will look at the three most common forms of tests that you will hear come up when talking about automated software teting: Unit, Feature/Integration, and End to End.
+
+Unit tests are typically very small and focused on a single section of code, often a single function. While unit tests are cheap to write and run, [they do not provide a large amount of confidence](https://twitter.com/erinfranmc/status/1148986961207730176) that your application is necessarily working correctly, rather only a small part of it instead.
+
+Feature/Integration tests offer a good middle ground between Unit and End to End tests. These types of tests will typically start touching multiple areas of your code base and will almost certainly start interacting with outside systems such as your database. They are more involved to write and take longer to run then unit tests, but they can provide a huge amount of confidence that your application is working correctly.
+
+End to End tests offer the highest level of confidence that your application is working as you intended since they are typically written with software that *actually* interacts directly with the application in question, just as if it was an end-user sitting in front of their computer. The tradeoff with End to End tests is that they take an incredibly long amount of time to run when compared to Feature/Integration and Unit tests.
+
+Each of the previous types of tests have their pros and cons that should be weighed when considering the needs of your application and yourself. A good general sentiment to keep in mind when it comes to testing is ["Write tests. Not too many. Mostly integration"](https://kentcdodds.com/blog/write-tests).
+
+## Test-Driven Development
+
+It's now time that we get on with the reason you've cloned this application and gone through this guide in the first place, to learn about and practice test-driven development.
+
+We will begin by implementing a set of API endpoints that can be used to create, read, update and delete To Do's from our configured storage using Laravel with it's [built in testing utilities](https://laravel.com/docs/9.x/http-tests) (based on [PHPUnit](https://github.com/sebastianbergmann/phpunit)).
+
+After that is complete, we will work on implementing the front-end interactions a user would take when managing the aforementioned To Do's using [React](https://reactjs.org/docs/getting-started.html) with [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/). Without further ado, let's just right into our first section.
+
 ### Laravel and PHPUnit
 
 #### 1. Creating a New To Do
