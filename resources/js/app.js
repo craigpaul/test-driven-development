@@ -5,7 +5,7 @@ import { ToDoProvider } from './contexts/ToDoContext';
 const root = createRoot(document.getElementById('root'));
 
 root.render(
-    <ToDoProvider>
-        <App />
-    </ToDoProvider>
+  <ToDoProvider>
+    <App />
+  </ToDoProvider>,
 );
