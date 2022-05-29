@@ -178,7 +178,7 @@ Laravel offers a concept called [Model Factories](https://laravel.com/docs/9.x/d
 
 As with the previous chapter's Act step, we are again going to make an HTTP request. This time it will be to the route that would normally be responsible for listing out resources. *See if you can figure out which one that is.*. With that we have completed the Act step.
 
-Finally, we will make any assertions to prove our expected flow has completed successfully. This time around we don't want to assert that we have received a `201 Created` response since we are not expecting to create a new To Do. This time around we are hoping to receive a `200 OK` response. The purpose behind fetching a listing of To Do's in this application is to display them to the end-user, so we will want to make sure we are sending back the To Do's we created in the Arrange step in a structure that makes the most sense. Once again Laravel's built in testing utilies offers an easy way to do this.
+Finally, we will make any assertions to prove our expected flow has completed successfully. This time around we don't want to assert that we have received a `201 Created` response since we are not expecting to create a new To Do. This time around we are hoping to receive a `200 OK` response. The purpose behind fetching a listing of To Do's in this application is to display them to the end-user, so we will want to make sure we are sending back the To Do's we created in the Arrange step in a structure that makes the most sense. Once again Laravel's built in testing utilies offer an easy way to do this.
 
 Whew! We're already done writing that test, that one flew by so fast! Now that we have our test, it's time to run it. You can accomplish this with the following command:
 
@@ -200,7 +200,33 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 #### 3. Update an Existing To Do
 
-...
+Our next chapter will involve updating our existing To Do's and returning the updated values as a JSON response. For this chapter, we're going to focus on marking a ToDo as complete. Let's start off again with a familiar first step of test-driven development, the Arrange step. Similar to the previous chapter, in order to update an existing To Do ... we need an existing To Do, so let's create it.
+
+Let's use our ToDo model factory that we used in the previous chapter to quickly generate our To Do that we wish to update. If you re-call, our model factory is set up to provide a random boolean to the `completed` attribute, which will cause a consistency problem for the scenario we're going to test. There are a couple of options we can choose from to prevent this problem. We could [override the default attributes on the model factory](https://laravel.com/docs/9.x/database-testing#persisting-models), but this is a one off solution, meaning everytime we want to mark a ToDo as not completed within our test cases, we would have to manually pass in that attribute value which will get annoying quickly. A better option in this case is to [add a factory state to our ToDo model factory](https://laravel.com/docs/9.x/database-testing#factory-states). In this case, we'd want to add a state called `incomplete` where the `completed` attribute is **always** false. After we've added this factory state, let's go back and update our test so that our model is going to for sure be incomplete.
+
+I'm sure that you know whats next ... the Act step! At this point, it should be no surprise that we're going to make an HTTP request to mark a given To Do as completed. That means we will be using the route that would be normally responsible for updating a single resource. *I'll let you re-review the HTTP verbs to figure out what that route and controller action should be*. With that we have completed the Act step.
+
+I am once again asking you to make some assertions to prove our expected flow has completed successfully! When you're updating a resource in a REST API, the conventional response status to expect is a `200 OK` (as we did in the last chapter). In order to remain consistent with other endpoint's, we will want to make sure we are sending back the To Do with the most up-to-date attributes in the same structure. The last thing we will want to verify is that the expected record was indeed updated with the expected attributes.
+
+We're done writing that test at this point. Now we can run it using the following command:
+
+```bash
+./develop artisan test --filter testCanUpdateExistingToDo
+```
+
+At this point I'm betting before you even ran the test, you had an inclination that there was going to be a failure? And I'm betting you knew what that failure was going to be! Well then, let's wait no longer and define our route. Open up the `routes/api.php` file and we will be on our way. *Keep in mind that we are working with a single resource in this case, and take a second to think how that URL would represent that kind of a request*.
+
+Now that we've cleared up that error, we can see that we are not returning the expected JSON structure. Let's set up a response with some fake data in the same manner as we've done previously.
+
+Good news everyone ![good news everyone](/resources/images/good-news-everyone.jpg)! We're returning the expected structure, but we're missing the actual expected values (just like the previous chapter). Let's go ahead and fetch our To Do from storage and swap out the fake data with our real data.
+
+Notice that we are still not past the error that's telling us we're not sending the correct data. For the moment, let's fake the return value so we can get past this error and see what we need to do next.
+
+Huzzah! Another error down for the count. Now we know that we're not properly persisting the provided changes within the request body. Let's go ahead and [update our model](https://laravel.com/docs/9.x/eloquent#updates) with the expected change(s). Since we're such good developers, we can also replace our (once again) faked data with the real data as well.
+
+Oh yeah! A passing test, time to party! Before we move on, let's discuss the fact that this endpoint is currently only able to change the completed attribute of the To Do. That's *sort of* useful, but it wouldn't help provide the best experience for the end user. *See if you can write another test on your own that will allow for updating the title attribute without breaking the existing test we just wrote*.
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/updating-an-existing-to-do`. You can also see an example solution to allowing updating the title attribute if you switch to `feature/updating-the-title-of-an-existing-to-do`.
 
 #### 4. Delete an Existing To Do
 
