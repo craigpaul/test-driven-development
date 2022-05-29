@@ -262,7 +262,7 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 Amazing job so far! You've completed your introduction into test-driven development using [Laravel](https://laravel.com/docs/9.x/http-tests) and [PHPUnit](https://github.com/sebastianbergmann/phpunit). Give yourself a huge pat on the back!
 
-As a quick review of your accomplishments so far, we've successfully implemented a handful of endpoints to satisfy the necessary CRUD actions that a To Do list application would require. We are now ready to move onto our frontend application which we will be building in a test-driven development fashion using [React](https://reactjs.org/docs/getting-started.html) and [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/).
+As a quick review of your accomplishments so far, we've successfully implemented a handful of endpoints to satisfy the necessary CRUD actions that a To Do list application would require. We are now ready to move onto our front-end application which we will be building in a test-driven development fashion using [React](https://reactjs.org/docs/getting-started.html) and [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/).
 
 When you're ready, let's move on to the next section.
 
