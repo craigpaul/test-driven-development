@@ -178,7 +178,7 @@ Laravel offers a concept called [Model Factories](https://laravel.com/docs/9.x/d
 
 As with the previous chapter's Act step, we are again going to make an HTTP request. This time it will be to the route that would normally be responsible for listing out resources. *See if you can figure out which one that is.*. With that we have completed the Act step.
 
-Finally, we will make any assertions to prove our expected flow has completed successfully. This time around we don't want to assert that we have received a `201 Created` response since we are not expecting to create a new To Do. This time around we are hoping to receive a `200 OK` response. The purpose behind fetching a listing of To Do's in this application is to display them to the end-user, so we will want to make sure we are sending back the To Do's we created in the Arrange step in a structure that makes the most sense. Once again Laravel's built in testing utilies offers an easy way to do this.
+Finally, we will make any assertions to prove our expected flow has completed successfully. This time around we don't want to assert that we have received a `201 Created` response since we are not expecting to create a new To Do. This time around we are hoping to receive a `200 OK` response. The purpose behind fetching a listing of To Do's in this application is to display them to the end-user, so we will want to make sure we are sending back the To Do's we created in the Arrange step in a structure that makes the most sense. Once again Laravel's built in testing utilies offer an easy way to do this.
 
 Whew! We're already done writing that test, that one flew by so fast! Now that we have our test, it's time to run it. You can accomplish this with the following command:
 
