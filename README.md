@@ -226,7 +226,7 @@ Huzzah! Another error down for the count. Now we know that we're not properly pe
 
 Oh yeah! A passing test, time to party! Before we move on, let's discuss the fact that this endpoint is currently only able to change the completed attribute of the To Do. That's *sort of* useful, but it wouldn't help provide the best experience for the end user. *See if you can write another test on your own that will allow for updating the title attribute without breaking the existing test we just wrote*.
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/updating-an-existing-to-do`.
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/updating-an-existing-to-do`. You can also see an example solution to allowing updating the title attribute if you switch to `feature/updating-the-title-of-an-existing-to-do`.
 
 #### 4. Delete an Existing To Do
 
