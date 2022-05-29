@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('to-dos')->name('to-dos.index')->uses([Controllers\ToDoController::class, 'index']);
 Route::post('to-dos')->name('to-dos.store')->uses([Controllers\ToDoController::class, 'store']);
+Route::put('to-dos/{id}')->name('to-dos.update')->uses([Controllers\ToDoController::class, 'update']);

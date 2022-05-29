@@ -66,7 +66,20 @@ class ToDoController
      */
     public function update(Request $request, $id)
     {
-        //
+        $toDo = $this->toDo
+            ->newQuery()
+            ->select(['id', 'title', 'completed'])
+            ->find($id);
+
+        $toDo->update([
+            'completed' => $request->input('completed'),
+        ]);
+
+        return $this->response->json([
+            'id' => $toDo->getKey(),
+            'title' => $toDo->title,
+            'completed' => $toDo->completed,
+        ]);
     }
 
     /**

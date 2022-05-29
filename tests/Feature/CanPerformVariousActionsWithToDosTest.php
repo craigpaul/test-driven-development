@@ -64,11 +64,30 @@ class CanPerformVariousActionsWithToDosTest extends TestCase
 
     public function testCanUpdateExistingToDo()
     {
-        // Arrange
+        $toDo = ToDo::factory()->incomplete()->create();
 
-        // Act
+        $this->withoutExceptionHandling()
+            ->putJson(route('to-dos.update', [
+                'id' => $toDo->getKey(),
+            ]), [
+                'completed' => true,
+            ])
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'completed',
+            ])
+            ->assertJsonFragment([
+                'id' => $toDo->getKey(),
+                'title' => $toDo->title,
+                'completed' => true,
+            ]);
 
-        // Assert
+        $this->assertDatabaseHas(ToDo::class, [
+            'id' => $toDo->getKey(),
+            'completed' => true,
+        ]);
     }
 
     public function testCanDeleteExistingToDo()
