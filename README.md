@@ -168,7 +168,7 @@ We've now arrived at our last error (for now). This exception tells us that noth
 
 Boom! That is the whole test-driven development process successfully completed! Now you might be saying, hold on a second there ... we're still returning fake data from the endpoint, and you'd be correct. Now I want you to take a second to figure out how you can prove that we're receiving the correct information back in the response before we call this endpoint a success and move onto the next one. Great job!
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-creating-a-new-to-do`.
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-1-creating-a-new-to-do`.
 
 #### 2. Read Existing To Do's
 
@@ -196,7 +196,7 @@ You may or may not have run into an error stating that we are not returning a bo
 
 Oh heck ya bud! That chapter flew by so fast! Congratulations on completing another chapter.
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-reading-existing-to-dos`.
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-2-reading-existing-to-dos`.
 
 #### 3. Update an Existing To Do
 
@@ -226,7 +226,7 @@ Huzzah! Another error down for the count. Now we know that we're not properly pe
 
 Oh yeah! A passing test, time to party! Before we move on, let's discuss the fact that this endpoint is currently only able to change the completed attribute of the To Do. That's *sort of* useful, but it wouldn't help provide the best experience for the end user. *See if you can write another test on your own that will allow for updating the title attribute without breaking the existing test we just wrote*.
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-updating-an-existing-to-do`. You can also see an example solution to allowing updating the title attribute if you switch to `feature/PHP-updating-the-title-of-an-existing-to-do`.
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-3-updating-an-existing-to-do`. You can also see an example solution to allowing updating the title attribute if you switch to `feature/PHP-3-updating-the-title-of-an-existing-to-do`.
 
 #### 4. Delete an Existing To Do
 
@@ -256,7 +256,7 @@ Next we see that our To Do isn't actually being deleted, which isn't a very good
 
 Oh my gosh, I think I have whiplash! We finished that chapter so fast!
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-delete-an-existing-to-do`.
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/PHP-4-delete-an-existing-to-do`.
 
 #### Conclusion
 
