@@ -122,10 +122,16 @@ class CanPerformVariousActionsWithToDosTest extends TestCase
 
     public function testCanDeleteExistingToDo()
     {
-        // Arrange
+        $toDo = ToDo::factory()->create();
 
-        // Act
+        $this->withoutExceptionHandling()
+            ->delete(route('to-dos.destroy', [
+                'id' => $toDo->getKey(),
+            ]))
+            ->assertNoContent();
 
-        // Assert
+        $this->assertDatabaseMissing(ToDo::class, [
+            'id' => $toDo->getKey(),
+        ]);
     }
 }

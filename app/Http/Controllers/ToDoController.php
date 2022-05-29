@@ -88,6 +88,12 @@ class ToDoController
      */
     public function destroy($id)
     {
-        //
+        $toDo = $this->toDo
+            ->newQuery()
+            ->find($id);
+
+        $toDo->delete();
+
+        return $this->response->noContent();
     }
 }
