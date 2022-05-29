@@ -48,6 +48,7 @@ class ToDoController
     {
         $toDo = $this->toDo->newQuery()->create([
             'title' => $request->input('title'),
+            'completed' => false,
         ]);
 
         return $this->response->json([
