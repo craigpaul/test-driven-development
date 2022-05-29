@@ -90,6 +90,36 @@ class CanPerformVariousActionsWithToDosTest extends TestCase
         ]);
     }
 
+    public function testCanChangeTheTitleOfExistingToDo()
+    {
+        $toDo = ToDo::factory()->create();
+
+        $title = $this->faker->word();
+
+        $this->withoutExceptionHandling()
+            ->putJson(route('to-dos.update', [
+                'id' => $toDo->getKey(),
+            ]), [
+                'title' => $title,
+            ])
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'completed',
+            ])
+            ->assertJsonFragment([
+                'id' => $toDo->getKey(),
+                'title' => $title,
+                'completed' => $toDo->completed,
+            ]);
+
+        $this->assertDatabaseHas(ToDo::class, [
+            'id' => $toDo->getKey(),
+            'title' => $title,
+        ]);
+    }
+
     public function testCanDeleteExistingToDo()
     {
         // Arrange

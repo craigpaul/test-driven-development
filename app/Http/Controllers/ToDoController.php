@@ -71,9 +71,7 @@ class ToDoController
             ->select(['id', 'title', 'completed'])
             ->find($id);
 
-        $toDo->update([
-            'completed' => $request->input('completed'),
-        ]);
+        $toDo->update($request->only('title', 'completed'));
 
         return $this->response->json([
             'id' => $toDo->getKey(),
