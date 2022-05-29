@@ -230,7 +230,33 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 #### 4. Delete an Existing To Do
 
-...
+Wow! Hard to believe we've already arrived at our final chapter of our test-driven development lessons for Laravel and PHPUnit. Up to this point, we've fulfilled three out out of the four portions of [the CRUD actions](https://developer.mozilla.org/en-US/docs/Glossary/CRUD). As a quick review, CRUD (Create, Read, Update, Delete) is an acronym for ways one can operate on stored data. It is a mnemonic for the four basic functions of persistent storage. CRUD typically refers to operations performed in a database or datastore, but it can also apply to higher level functions of an application such as soft deletes where data is not actually deleted but marked as deleted via a status.
+
+That means it's now time to add the ability to delete a To Do. As we've done three times before, we will start off with our Arrange step. In a similar manner to the previous chapter, in order to delete an existing To Do ... we need an existing  To Do, so let's create it.
+
+This time around we don't need anything special for our ToDo model factory, so we can just create a new fake To Do and move on to our Act step!
+
+I don't think I need to tell you what we're going to do here ... SURPRISE! We're making an HTTP request to delete a To Do. As with previous routes, we're sticking to [the RESTful HTTP methods](https://restfulapi.net/http-methods/). This time, we're going to utilize [the DELETE method](https://restfulapi.net/http-methods/#delete). Now that we've made our DELETE request, we are good to move onto our next step.
+
+Depending on your use case, the response status/structure of the DELETE endpoint can change. For the purpose of this application we should be safe to assume that we do not need to return any content in our response. This means we want to return a `204 No Content` status with an empty body. In order to verify that the correct actions have taken place, we need to reach for Laravel's built in testing utilities to understand that our expected To Do no longer exists in storage. 
+
+Maybe this is surprising to you, maybe it's not ... but we're done with this test! You can run it using the following command:
+
+```bash
+./develop artisan test --filter testCanDeleteExistingToDo
+```
+
+I know at this point you're probably thinking ... well I know exactly what your going to say and exactly what is going to happen the moment I run the test! Perhaps I should just ["do the thing"](https://www.youtube.com/watch?v=ojhTu9aAa_Y). While you might be tempted to, I'd urge you to continue working through errors one at a time for now. There will come a time later in your career where you feel absolutely comfortable with test-driven development to know and understand that you can skip a few steps, but this will take lot's of practice to ensure you don't do anything unnecessary. *[Make it work, make it right, make it fast](https://thetombomb.com/posts/make-it-work-right-fast)*. In this context, it refers to your skills in applying *proper* test-driven development. Keep at it, and it will become second nature.
+
+With that out of the way, now we know that we have to define our route for deleting an existing to do. Open up the `routes/api.php` file and start typing! *As with the previous chapter, keep in mind that we are working with a single resource in this case, and take a second to think how that URL would represent that kind of a request*.
+
+If you recall back from Chapter 2, the default response of an empty Laravel controller action will be a `200 OK` which we see here as our first error. Let's start off by returning a `204 No Content` response. Luckily, Laravel's built in `ResponseFactory` has a nicely abstracted method for returning just such a response. *See if you can deduce just what that method name would be*.
+
+Next we see that our To Do isn't actually being deleted, which isn't a very good thing for our DELETE action to not be doing. Let's go ahead and [implement that deletion](https://laravel.com/docs/9.x/eloquent#deleting-models).
+
+Oh my gosh, I think I have whiplash! We finished that chapter so fast!
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/delete-an-existing-to-do`.
 
 ### React and Testing Library / Jest
 
