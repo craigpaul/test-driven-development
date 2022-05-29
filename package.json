@@ -13,6 +13,7 @@
     },
     "devDependencies": {
         "@babel/preset-react": "^7.17.12",
+        "@faker-js/faker": "^7.1.0",
         "@swc/core": "^1.2.186",
         "@swc/jest": "^0.2.21",
         "@testing-library/jest-dom": "^5.16.4",
