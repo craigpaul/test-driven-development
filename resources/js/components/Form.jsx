@@ -23,11 +23,13 @@ function Form() {
           </svg>
         </div>
       ) : null}
-      <input
-        className="h-full w-full appearance-none font-light text-gray-400 placeholder:text-gray-200 focus:outline-none"
-        placeholder="What needs to be done?"
-        type="text"
-      />
+      <form className="h-full w-full">
+        <input
+          className="h-full w-full appearance-none font-light text-gray-400 placeholder:text-gray-200 focus:outline-none"
+          placeholder="What needs to be done?"
+          type="text"
+        />
+        </form>
     </header>
   );
 }
