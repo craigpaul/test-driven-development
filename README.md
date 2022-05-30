@@ -77,7 +77,7 @@ As part of our Docker setup, we included a MariaDB database. Let's run our migra
 ./develop artisan migrate
 ```
 
-In addition to migrating that database, we will need to migrate the testing database, which can be accomplised by running the following command:
+In addition to migrating that database, we will need to migrate the testing database, which can be accomplished by running the following command:
 
 ```bash
 ./develop artisan migrate --env=testing
@@ -119,7 +119,7 @@ It's now time that we get on with the reason you've cloned this application and 
 
 We will begin by implementing a set of API endpoints that can be used to create, read, update and delete To Do's from our configured storage using Laravel with it's [built in testing utilities](https://laravel.com/docs/9.x/http-tests) (based on [PHPUnit](https://github.com/sebastianbergmann/phpunit)).
 
-After that is complete, we will work on implementing the front-end interactions a user would take when managing the aforementioned To Do's using [React](https://reactjs.org/docs/getting-started.html) with [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/). Without further ado, let's just right into our first section.
+After that is complete, we will work on implementing the front-end interactions a user would take when managing the aforementioned To Do's using [React](https://reactjs.org/docs/getting-started.html) with [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/). Without further ado, let's jump right into our first section.
 
 ### Laravel and PHPUnit
 
@@ -153,10 +153,10 @@ Oh no, a failing test ![Ahhhhhhhhh](/resources/images/ahhhhhhhhh.gif)! That's ok
 Our initial error is saying that the route we've provided to the `postJson` method doesn't exist, so let's define it now. In `routes/api.php` we can [define a route matching the name](https://laravel.com/docs/9.x/routing#named-routes) that we provided in the test with an action. What is an action you ask? That is the controller that will be handling incoming requests to that endpoint. Before we define this route, we might as well take a moment to create a controller that this endpoint can use. Using the artisan command line interface you can automatically generate a controller by opening your terminal and typing the following command:
 
 ```bash
-./develop artisan make:controller ToDoController -r
+./develop artisan make:controller ToDoController --api
 ```
 
-Take notice of the `-r` option being provided in the above command. This will generate a controller stub with methods corresponding to the various RESTful verbs. For now, just know that we won't require all these methods to fill out this controller, so you can remove the `create`, `show`, and `edit` methods. *One more thing to note is that the generated controller stub contains [a reference to a parent class](https://laravel.com/docs/9.x/controllers#basic-controllers) that does not exist in this application. You can safely remove this extension as we will not need any features that the parent class usually provides*.
+Take notice of the `--api` option being provided in the above command. This will generate a controller stub with methods corresponding to the various RESTful verbs that would typically be used in an API controller. *One more thing to note is that the generated controller stub contains [a reference to a parent class](https://laravel.com/docs/9.x/controllers#basic-controllers) that does not exist in this application. You can safely remove this extension as we will not need any features that the parent class usually provides*.
 
 Now we can safely provide the action for our new route. Let's point this route to the store method on the ToDoController and give our test another run to see where we are at.
 
