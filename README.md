@@ -320,7 +320,43 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 #### 2. Display Existing To Do's
 
-...
+Now that we're feeling a little more comfortable with test-driven development with Testing Library/Jest, we can jump right into our next chapter, which will involve displaying existing To Do's upon loading the application. As with the previous chapter, we should start off thinking of what we require in our Arrange step. In order to display existing To Do's ... we need to handle the communication between the server and the web application. Let's write a new request handler and response resolver for fetching existing To Do's!
+
+In order to do this, let's create another helper function in the same manner as the previous chapter. Once you have set up a request handler and response resolver to return a few fake To Do's, we can move on. *Remember to match your expected endpoint and JSON structure you created in the previous section. Also, be sure to return your fake To Do's from your helper function so we can use it in our test(s)*.
+
+As with the previous chapter, the next thing we need during our Arrange step is to set up "our world". This test will again only be rendering a simple tree using the top level `<App />` component and the associated context provider. Now that we've successfully mocked our API interaction and some fake To Do's that it will send back to us, as well as rendered our application, we can move onto the next step!
+
+Let's take a second to think about what the user would be doing in order to see existing To Do's... well... nothing? That's right, the user would only be loading the page in this case, which is what we are doing when we pass our component tree to the `render` function. Give yourselves a pat on the back, you just completed the easiest Act step you'll ever do!
+
+Now we will make a few assertions to prove that we are indeed seeing the correct To Do's being displayed. This time around we are not really interacting with the application in anyway, we are simply waiting for the list (and subsequent list items) to show up. *Recall back to the previous chapter how you can use asynchronous utilities to wait for an element to show up to*. One thing we might want to do once we have our list is verify that the [correct amount of list items](https://jestjs.io/docs/expect#tohavelengthnumber) are within that list. After that, we should confirm that they are actually the correct list items, perhaps by looping through the fake To Do's that we are returning from the API?
+
+Now that we have our test, it's time to run it. You can accomplish this with the following command:
+
+```bash
+./develop yarn test -t 'can display existing to dos'
+```
+
+Unsurprisingly, we have a failing test! Let's take a look at the error and see what we can do to move past it.
+
+Our initial error is saying that we are unable to find an element with the role of `list`. If you recall from the previous chapter, the list will only show up once we have items in state to display. In order to get those items, we need to make initiate some form of communication with the server to retrieve them.
+
+Want to talk about another hotly contested subject in the React community? No? Well... too bad, cause we're going to. There has been lots of debate about where to trigger [side-effects](https://beta.reactjs.org/learn/keeping-components-pure#side-effects-unintended-consequences) within a React application, with the React core team being [the voice of reason as of late](https://beta.reactjs.org/learn/keeping-components-pure#where-you-can-cause-side-effects). That presents a problem, however, for initial loading of required data. There are solutions coming about in future versions of React, but for now we will stick with a tried and true method of fetching within a `useEffect` hook. *Perhaps you're unfamilar with the hook? Be sure to [read up on useEffect](https://overreacted.io/a-complete-guide-to-useeffect/) to get a leg up!*.
+
+Are you back already? That was a pretty long article. Well... alright, let's get started! Since we're using our context provider to contain all of our logic related to our To Do's, it seems like a good place to fetch any existing To Do's. Let's add an effect that will trigger a GET request to the appropriate endpoint and then add the returned items to state. Once you've completed that, let's run our test and see if we've passed that error.
+
+Huzzah! A passing test! That was pretty quick... almost too quick. Something might be nagging in the back of your brain saying "Hey!... wait a minute". Let's run all of our tests to confirm that nagging suspicion. You can accomplish this with the following command:
+
+```bash
+./develop yarn test
+```
+
+That nagging feeling is correct! We've just introduced a breaking change to our already written test for creating a To Do by causing a network failure. Since we were not previously fetching existing To Do's in that test, but have introduced the logic to do so here, we get a failure. This can be easily amended, however, by calling the same request handler / response resolver function in our first test. Let's add it and see what happens.
+
+It's still failing, how can that be? Well, if you recall the original test, the list did not show up until the new To Do was created. With this change, however, the list will show up before we've had the opportunity to create the new To Do. Don't fret though, there are a couple of ways that we can handle this. We _could_ change the existing test to wait for the specific list item to be available, but that changes the conditions of the test and makes it more fragile. An alternative solution could be to adjust our helper function so that we can control how many fake To Do's get returned from the API. That would allow us to keep the original test conditions intact while ensuring the newly introduced API call does not introduce any unwanted side-effects. *See what you can come up with to allow for this configurability in order to prevent unwanted side-effects in our tests*.
+
+We hit a little pot hole in the road, but we got to our destination all the same. Great work!
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/JS-2-display-existing-to-dos`.
 
 #### 3. Mark an Existing To Do as Completed
 
