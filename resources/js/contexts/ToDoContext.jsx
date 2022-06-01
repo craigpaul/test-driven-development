@@ -1,9 +1,23 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const ToDoContext = createContext({ items: [] });
 
 function ToDoProvider({ children }) {
   const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/to-dos', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    }).then((response) => {
+      return response.json();
+    }).then((items) => {
+      setItems(items);
+    });
+  }, []);
 
   const addItem = (item) => {
     setItems((previousState) => [...previousState, item]);
