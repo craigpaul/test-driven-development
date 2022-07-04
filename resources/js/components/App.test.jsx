@@ -118,6 +118,67 @@ it('can change the title of an existing to do', async () => {
   userEvent.tab();
 });
 
+it('will show the correct amount of uncompleted items', async () => {
+  const [goToStore, pickUpKids] = setSuccessfulToDoFetch({ completed: false, count: 2 });
+
+  setSuccessfulToDoUpdate({ ...goToStore, completed: true });
+  setSuccessfulToDoUpdate({ ...pickUpKids, completed: true });
+
+  render(
+    <ToDoProvider>
+      <App />
+    </ToDoProvider>
+  );
+
+  const alert = await screen.findByRole('alert');
+
+  expect(alert).toBeInTheDocument()
+  expect(alert).toHaveTextContent(/2 items left/i)
+
+  const list = await screen.findByRole('list');
+  const firstItem = within(list).getByRole('listitem', { name: new RegExp(goToStore.title, 'i') });
+
+  expect(list).toBeInTheDocument();
+  expect(firstItem).toBeInTheDocument();
+
+  const firstCheckbox = within(firstItem).getByRole('checkbox');
+
+  // Using the suggested approach of clicking the checkbox with userEvent is bugged
+  // with the currently installed versions of our testing dependencies. Using the
+  // more low-level implementation of fireEvent prevents this incorrect warning
+  // and produces a successful result.
+  //
+  // https://github.com/testing-library/react-testing-library/issues/1051
+  // userEvent.click(firstCheckbox);
+
+  fireEvent.click(firstCheckbox);
+
+  await waitFor(() => {
+    expect(alert).toHaveTextContent(/1 item left/i);
+  });
+
+  const secondItem = within(list).getByRole('listitem', { name: new RegExp(pickUpKids.title, 'i') });
+
+  expect(list).toBeInTheDocument();
+  expect(secondItem).toBeInTheDocument();
+
+  const secondCheckbox = within(secondItem).getByRole('checkbox');
+
+  // Using the suggested approach of clicking the checkbox with userEvent is bugged
+  // with the currently installed versions of our testing dependencies. Using the
+  // more low-level implementation of fireEvent prevents this incorrect warning
+  // and produces a successful result.
+  //
+  // https://github.com/testing-library/react-testing-library/issues/1051
+  // userEvent.click(secondCheckbox);
+
+  fireEvent.click(secondCheckbox);
+
+  await waitFor(() => {
+    expect(alert).toHaveTextContent(/0 items left/i);
+  });
+})
+
 it('can delete an existing to do', async () => {
   // Arrange
 
