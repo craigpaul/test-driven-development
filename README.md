@@ -433,3 +433,13 @@ Ok, back to reality (op there goes gravity). If you recall during the previous c
 Huzzah! A passing test! Before we move on, you may or may not see a warning pop up stating "Warning: An update to ToDoProvider inside a test was not wrapped in act(...)." depending on how you implemented the user interaction. This particular problem is a [bug within the testing framework](https://github.com/testing-library/react-testing-library/issues/1051) which remains unsolved at the time of writing. You can get around it by using the [fireEvent API](https://testing-library.com/docs/dom-testing-library/api-events/) instead of userEvent in order to click the button.
 
 If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/JS-4-delete-an-existing-to-do`.
+
+#### Conclusion
+
+Congratulations! You've completed your introduction into test-driven development using [React](https://beta.reactjs.org/learn) and [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/). Give yourself a huge pat on the back!
+
+If you would like to take a look at an end to end completed example of the course, feel free to switch to `feature/completed`.
+
+...
+
+You're still here? It's over. Go home. Go.
