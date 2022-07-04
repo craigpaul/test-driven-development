@@ -232,7 +232,7 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 Wow! Hard to believe we've already arrived at our final chapter of our test-driven development lessons for Laravel and PHPUnit. Up to this point, we've fulfilled three out out of the four portions of [the CRUD actions](https://developer.mozilla.org/en-US/docs/Glossary/CRUD). As a quick review, CRUD (Create, Read, Update, Delete) is an acronym for ways one can operate on stored data. It is a mnemonic for the four basic functions of persistent storage. CRUD typically refers to operations performed in a database or datastore, but it can also apply to higher level functions of an application such as soft deletes where data is not actually deleted but marked as deleted via a status.
 
-That means it's now time to add the ability to delete a To Do. As we've done three times before, we will start off with our Arrange step. In a similar manner to the previous chapter, in order to delete an existing To Do ... we need an existing  To Do, so let's create it.
+That means it's now time to add the ability to delete a To Do. As we've done three times before, we will start off with our Arrange step. In a similar manner to the previous chapter, in order to delete an existing To Do ... we need an existing To Do, so let's create it.
 
 This time around we don't need anything special for our ToDo model factory, so we can just create a new fake To Do and move on to our Act step!
 
