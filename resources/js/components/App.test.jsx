@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import setSuccessfulToDoCreation from '../__helpers__/setSuccessfulToDoCreation';
@@ -91,6 +92,30 @@ it('can mark a to do as completed', async () => {
   const completed = await within(listItem).findByTitle(/Completed/i);
 
   expect(checkbox.nextSibling).toContainElement(completed);
+});
+
+it('can change the title of an existing to do', async () => {
+  const [toDo] = setSuccessfulToDoFetch({ count: 1 });
+  const title = faker.random.words()
+
+  setSuccessfulToDoUpdate({ ...toDo, title })
+
+  render(
+    <ToDoProvider>
+      <App />
+    </ToDoProvider>
+  );
+
+  const list = await screen.findByRole('list');
+  const listItem = within(list).getByRole('listitem', { name: new RegExp(toDo.title, 'i') });
+
+  expect(list).toBeInTheDocument();
+  expect(listItem).toBeInTheDocument();
+
+  const input = within(listItem).getByRole('textbox')
+
+  userEvent.type(input, title);
+  userEvent.tab()
 });
 
 it('can delete an existing to do', async () => {

@@ -7,6 +7,21 @@ function Item({ item }) {
   const inputId = `item-${item.id}`;
   const labelId = `${inputId}-label`;
 
+  const handleBlur = (event) => {
+    fetch('/api/to-dos/' + item.id, {
+      body: JSON.stringify({ title: event.currentTarget.value }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    }).then((response) => {
+      return response.json();
+    }).then((item) => {
+      updateItem(item);
+    });
+  }
+
   const handleChange = (event) => {
     fetch('/api/to-dos/' + item.id, {
       body: JSON.stringify({ completed: event.currentTarget.checked }),
@@ -27,7 +42,7 @@ function Item({ item }) {
       aria-labelledby={labelId}
       className="group flex items-center justify-between border-t border-gray-200 py-4"
     >
-      <div className="flex items-center">
+      <div className="flex items-center w-full">
         <div className="mx-4">
           <input
             className="sr-only"
@@ -64,10 +79,10 @@ function Item({ item }) {
           </label>
         </div>
         <div
-          className={item.completed ? 'text-gray-300 line-through' : null}
+          className={clsx('w-full', item.completed ? 'text-gray-300 line-through' : null)}
           id={labelId}
         >
-          {item.title}
+          <input className="outline-none w-full truncate" defaultValue={item.title} onBlur={handleBlur} />
         </div>
       </div>
       <div className="mr-4 flex">
