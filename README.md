@@ -232,7 +232,7 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 Wow! Hard to believe we've already arrived at our final chapter of our test-driven development lessons for Laravel and PHPUnit. Up to this point, we've fulfilled three out out of the four portions of [the CRUD actions](https://developer.mozilla.org/en-US/docs/Glossary/CRUD). As a quick review, CRUD (Create, Read, Update, Delete) is an acronym for ways one can operate on stored data. It is a mnemonic for the four basic functions of persistent storage. CRUD typically refers to operations performed in a database or datastore, but it can also apply to higher level functions of an application such as soft deletes where data is not actually deleted but marked as deleted via a status.
 
-That means it's now time to add the ability to delete a To Do. As we've done three times before, we will start off with our Arrange step. In a similar manner to the previous chapter, in order to delete an existing To Do ... we need an existing  To Do, so let's create it.
+That means it's now time to add the ability to delete a To Do. As we've done three times before, we will start off with our Arrange step. In a similar manner to the previous chapter, in order to delete an existing To Do ... we need an existing To Do, so let's create it.
 
 This time around we don't need anything special for our ToDo model factory, so we can just create a new fake To Do and move on to our Act step!
 
@@ -360,8 +360,86 @@ If you would like to take a look at an example solution to this chapter, feel fr
 
 #### 3. Mark an Existing To Do as Completed
 
-...
+Our next chapter will involve allowing the end-user to mark an existing To Do as completed. Let's start off thinking of what should happen in our Arrange step. Just like the previous chapter, we will need to handle the communication between the server and the web application to ensure there are existing To Do's to actually mark as completed. Luckily, we already wrote a helper function to do this for us in the last chapter! One thing that might be bugging you about this function though, is that the completed attribute is completely random, and if there is one thing that causes havok on a test involving very specific conditions, it's random data! *See if you can figure out a way to conditionally ensure all To Do's are given a specific completed value*.
+
+As with the previous chapter, the next thing we need during our Arrange step is to set up "our world". This test will again only be rendering a simple tree using the top level `<App />` component and the associated context provider. Now that we've successfully mocked our API interaction and some fake To Do's that it will send back to us, as well as rendered our application, we can move onto the next step!
+
+In order for the user to mark an existing To Do as complete, we need to ensure the To Do's are actually showing up on the screen. *Recall back to the previous chapter how you can use asynchronous utilities to wait for an element to show up to*.
+
+Now that we've successfully found our list of To Do's and the specific To Do we're going to update, it's time to take action! Within our To Do's list item, we have a checkbox that the user can update. *See if you can figure out how to click a checkbox using the utilities provided to you by Testing Library*.
+
+Now that we've had the end-user click the checkbox, we need to assert that what we expect to happen afterwards has indeed happened. In this case, the label associated with our checkbox is going to render an SVG inside of it to indicate that it's been completed. In the accessibility tree, SVG elements don't actually have a traditional role as with most elements, which means we have to utilize [a different style of query](https://testing-library.com/docs/queries/about/#priority). The best query to reach for in this case is the [ByTitle query](https://testing-library.com/docs/queries/bytitle/). *See if you can add a title to the SVG (that makes sense) and ensure it shows up once the To Do has been completed. Keep in mind the usage of asynchronous utilities to wait for an element to show up to*.
+
+Now that we have our test, it's time to run it. You can accomplish this with the following command:
+
+```bash
+./develop yarn test -t 'can mark a to do as completed'
+```
+
+I'm sure it's no surprise, but we have a failing test! Let's dig in and see what we can do to move past it.
+
+Our initial error is saying that we are unable to find an element matching the title we just added to our SVG. How can that be? We clicked the checkbox. Well, currently that checkbox is actually not causing any sort of state updates, so we need to trigger that state update. 
+
+Before we dig into that, let's take a second to review [how to respond to events](https://beta.reactjs.org/learn/responding-to-events) in React.
+
+Now that we've touched up on our event handling knowledge, it's time to figure out how we can listen for when a checkbox's state has changed and trigger a function in response to that change. *See if you can figure out the correct event listener*.
+
+Now that we've got our event listener in place, it's time to actually submit a request to the server to update our existing To Do. If you recall in a previous chapter, we are using the built in utility, [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), to submit our requests. This time, we'll want to [make a PUT request](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data) to our expected endpoint containing the necessary data. After receiving our response and converting it to JSON we should receive our updated To Do information. Now we can go back and run our test.
+
+We are still receiving an error and it now tells us that we're hitting an endpoint that we haven't set up a matching request handler for! Oh no! Well, that's a simple enough fix though as we're already champions at writing request handlers. Let's add a helper function for setting up a successful To Do update.
+
+Now that we've cleared out that pesky warning, we have one last thing we need to take care of. I know that you're a smart cookie and you're yelling at the screen right now... "UPDATE THE STATE!". Well, you're correct, we need to actually apply our change. If you recall during the previous chapter, we exposed a function to push an item into our array of To Do's, this time we need to update an existing item. *Try writing and calling a function that will [update the state with your new item while maintaining the other existing state](https://beta.reactjs.org/apis/usestate#updating-state-based-on-the-previous-state)*. Beautiful! Now let's run our test one more time.
+
+Huzzah! A passing test! Before we move on, you may or may not see a warning pop up stating "Warning: An update to ToDoProvider inside a test was not wrapped in act(...)." depending on how you implemented the user interaction. This particular problem is a [bug within the testing framework](https://github.com/testing-library/react-testing-library/issues/1051) which remains unsolved at the time of writing. You can get around it by using the [fireEvent API](https://testing-library.com/docs/dom-testing-library/api-events/) instead of userEvent in order to click the checkbox.
+
+Now then, let's discuss the fact that this component is currently only able to mark the To Do as completed. That's *pretty* useful, but we can do more to provide the best experience for the end user. *See if you can write another test on your own that will allow for changing the title without breaking the existing test we just wrote*.
+
+Throughout running these tests you may have noticed a `console.log` message appearing regarding the title amount of items in the list and that we should show them. *See if you can write another test on your own that will show the appropriate number of uncompleted items in the footer*.
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/JS-3-updating-an-existing-to-do`. You can also see an example solution to allowing changing the title if you switch to `feature/JS-3-updating-the-title-of-an-existing-to-do`. You can also see an example solution for showing the amount of uncompleted items if you switch to `feature/JS-3-showing-uncompleted-items-in-the-footer`.
 
 #### 4. Delete an Existing To Do
 
+OMG! We're already at the final chapter of our test-driven development lessons for React and Testing Library/Jest. Up to this point we've added functionality to allow our end-users to create new To Do's, display existing To Do's, as well as update those To Do's. If you recall from the previous section, this user actions map directly to our [CRUD actions](https://developer.mozilla.org/en-US/docs/Glossary/CRUD) we implemented on the server. 
+
+That means it's now time to add the ability to delete an existing To Do. As we've done many times before, we will start off with our Arrange step. In a similar manner to the previous chapter, in order to delete an existing To Do ... we need an existing To Do, so let's get going!
+
+To start off with, we can utilize the same helper function we created a couple of chapters ago in order to display one or more To Do's.
+
+We know that the point of our test is to trigger a DELETE request so that the To Do in question will be completely removed from our UI, so let's be sure to add a request handler for that endpoint now. *Be sure to match exactly what you're already written endpoint is returning for a response*.
+
+Next up, we have to set up "our world". This test, much like every one before it, will only be rendering a simple tree using the top level `<App />` component and the associated context provider. Now that we've successfully mocked our API interaction and some fake To Do's that it will send back to us, as well as rendered our application, we can move onto the next step!
+
+In order for the user to delete an existing To Do as complete, we need to ensure the To Do's are actually showing up on the screen. *Recall back to the previous chapter how you can use asynchronous utilities to wait for an element to show up to*.
+
+Now that we've successfully found our list of To Do's and the specific To Do we're going to delete, it's time to get to work! We already have a button within our To Do's list item that we are going to use to trigger the deletion, so let's find it and click it.
+
+Now that we've had the end-user click the checkbox, we need to assert that what we expect to happen afterwards has indeed happened. This time, we're hoping to see that the To Do is actually [removed from the list](https://testing-library.com/docs/dom-testing-library/api-async/#waitforelementtoberemoved). Once we're satisfied that the To Do is indeed removed from the list and we've verified it using an expectation, we have our test and it's time to run it. You can accomplish this with the following command:
+
+```bash
+./develop yarn test -t 'can delete an existing to do'
+```
+
+To hopefully no surprise, we have a failing test! We can see from the error that the element is not being removed. This makes sense because we haven't hooked up any state changes to cause the element to no longer exist in our list of To Do's.
+
+If you recall from the previous chapter we reviewed how to listen for events on elements. This time, we want to respond to a click on the Delete button within the specific item. *See if you can figure out the correct event listener*.
+
+Now that we've got our event listener in place, it's time to actually submit a request to the server to delete our existing To Do. If you recall in a previous chapter, we are using the built in utility, [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), to submit our requests. This time, we'll want to [make a DELETE request](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data) to our expected endpoint. Since our DELETE endpoint is returning a `204 No Content` response, we cannot convert our response to JSON anymore, otherwise we will get an error. This time, let's simply check that the request was successful. The `Response` object returned from our request contains an [`ok` property](https://developer.mozilla.org/en-US/docs/Web/API/Response/ok) that will either be `true` or `false` to indicate whether the request was successful or not.
+
+This might get you thinking... "well, what if the response is not ok?" and that is an excellent question! Throughout this exercise we've been focusing on happy path testing to allow you to gain a solid understanding of testing, but up to this point you've only just touched the tip of the iceberg. It will be up to you to continue learning, investigating and understanding how to better test and develop applications as you continue on the journey through your career.
+
+Ok, back to reality (op there goes gravity). If you recall during the previous chapter, we wrote a function to update an item that exists in our array of To Do's. This time we need to remove an existing item. *Try writing and calling a function that will [update the state with your new item while maintaining the other existing state](https://beta.reactjs.org/apis/usestate#updating-state-based-on-the-previous-state)*. Beautiful! Now let's run our test one more time.
+
+Huzzah! A passing test! Before we move on, you may or may not see a warning pop up stating "Warning: An update to ToDoProvider inside a test was not wrapped in act(...)." depending on how you implemented the user interaction. This particular problem is a [bug within the testing framework](https://github.com/testing-library/react-testing-library/issues/1051) which remains unsolved at the time of writing. You can get around it by using the [fireEvent API](https://testing-library.com/docs/dom-testing-library/api-events/) instead of userEvent in order to click the button.
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/JS-4-delete-an-existing-to-do`.
+
+#### Conclusion
+
+Congratulations! You've completed your introduction into test-driven development using [React](https://beta.reactjs.org/learn) and [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)/[Jest](https://jestjs.io/). Give yourself a huge pat on the back!
+
+If you would like to take a look at an end to end completed example of the course, feel free to switch to `feature/completed`.
+
 ...
+
+You're still here? It's over. Go home. Go.
