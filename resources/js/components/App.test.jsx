@@ -63,7 +63,7 @@ it('can display existing to dos', async () => {
 it('can mark a to do as completed', async () => {
   const [toDo] = setSuccessfulToDoFetch({ completed: false, count: 1 });
 
-  setSuccessfulToDoUpdate({ ...toDo, completed: true })
+  setSuccessfulToDoUpdate({ ...toDo, completed: true });
 
   render(
     <ToDoProvider>
