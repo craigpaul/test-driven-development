@@ -96,9 +96,9 @@ it('can mark a to do as completed', async () => {
 
 it('can change the title of an existing to do', async () => {
   const [toDo] = setSuccessfulToDoFetch({ count: 1 });
-  const title = faker.random.words()
+  const title = faker.random.words();
 
-  setSuccessfulToDoUpdate({ ...toDo, title })
+  setSuccessfulToDoUpdate({ ...toDo, title });
 
   render(
     <ToDoProvider>
@@ -112,10 +112,10 @@ it('can change the title of an existing to do', async () => {
   expect(list).toBeInTheDocument();
   expect(listItem).toBeInTheDocument();
 
-  const input = within(listItem).getByRole('textbox')
+  const input = within(listItem).getByRole('textbox');
 
   userEvent.type(input, title);
-  userEvent.tab()
+  userEvent.tab();
 });
 
 it('can delete an existing to do', async () => {
