@@ -23,8 +23,20 @@ function ToDoProvider({ children }) {
     setItems((previousState) => [...previousState, item]);
   };
 
+  const updateItem = (item) => {
+    setItems((previousState) =>
+      previousState.map((previousItem) => {
+        if (item.id === previousItem.id) {
+          return item
+        }
+
+        return previousItem
+      })
+    );
+  };
+
   return (
-    <ToDoContext.Provider value={{ addItem, items }}>{children}</ToDoContext.Provider>
+    <ToDoContext.Provider value={{ addItem, items, updateItem }}>{children}</ToDoContext.Provider>
   );
 }
 

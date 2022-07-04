@@ -1,8 +1,26 @@
 import clsx from 'clsx';
+import { useToDos } from '../contexts/ToDoContext';
 
 function Item({ item }) {
+  const { updateItem } = useToDos();
+
   const inputId = `item-${item.id}`;
   const labelId = `${inputId}-label`;
+
+  const handleChange = (event) => {
+    fetch('/api/to-dos/' + item.id, {
+      body: JSON.stringify({ completed: event.currentTarget.checked }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    }).then((response) => {
+      return response.json();
+    }).then((item) => {
+      updateItem(item);
+    });
+  };
 
   return (
     <li
@@ -15,6 +33,7 @@ function Item({ item }) {
             className="sr-only"
             defaultChecked={item.completed}
             id={inputId}
+            onChange={handleChange}
             type="checkbox"
           />
           <label
@@ -34,6 +53,7 @@ function Item({ item }) {
                 stroke="currentColor"
                 strokeWidth={2}
               >
+                <title>Completed</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
