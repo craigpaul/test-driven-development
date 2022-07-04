@@ -2,46 +2,136 @@
 
 namespace Tests\Feature;
 
+use App\Models\ToDo;
+use function route;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CanPerformVariousActionsWithToDosTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithFaker;
 
     public function testCanCreateNewToDo()
     {
-        // Arrange
+        $title = $this->faker->words(asText: true);
 
-        // Act
+        $this->withoutExceptionHandling()
+            ->postJson(route('to-dos.store'), [
+                'title' => $title,
+            ])
+            ->assertCreated()
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'completed',
+            ])
+            ->assertJsonFragment([
+                'title' => $title,
+                'completed' => false,
+            ]);
 
-        // Assert
+        $this->assertDatabaseHas(ToDo::class, [
+            'title' => $title,
+            'completed' => false,
+        ]);
     }
 
     public function testCanReadExistingToDos()
     {
-        // Arrange
+        $toDos = ToDo::factory()->count(3)->create();
 
-        // Act
+        $response = $this->withoutExceptionHandling()
+            ->getJson(route('to-dos.index'))
+            ->assertOk()
+            ->assertJsonStructure([
+                [
+                    'id',
+                    'title',
+                    'completed',
+                ],
+            ]);
 
-        // Assert
+        foreach ($toDos as $toDo) {
+            $response->assertJsonFragment([
+                'id' => $toDo->getKey(),
+                'title' => $toDo->title,
+                'completed' => (bool) $toDo->completed,
+            ]);
+        }
     }
 
     public function testCanUpdateExistingToDo()
     {
-        // Arrange
+        $toDo = ToDo::factory()->incomplete()->create();
 
-        // Act
+        $this->withoutExceptionHandling()
+            ->putJson(route('to-dos.update', [
+                'id' => $toDo->getKey(),
+            ]), [
+                'completed' => true,
+            ])
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'completed',
+            ])
+            ->assertJsonFragment([
+                'id' => $toDo->getKey(),
+                'title' => $toDo->title,
+                'completed' => true,
+            ]);
 
-        // Assert
+        $this->assertDatabaseHas(ToDo::class, [
+            'id' => $toDo->getKey(),
+            'completed' => true,
+        ]);
+    }
+
+    public function testCanChangeTheTitleOfExistingToDo()
+    {
+        $toDo = ToDo::factory()->create();
+
+        $title = $this->faker->word();
+
+        $this->withoutExceptionHandling()
+            ->putJson(route('to-dos.update', [
+                'id' => $toDo->getKey(),
+            ]), [
+                'title' => $title,
+            ])
+            ->assertOk()
+            ->assertJsonStructure([
+                'id',
+                'title',
+                'completed',
+            ])
+            ->assertJsonFragment([
+                'id' => $toDo->getKey(),
+                'title' => $title,
+                'completed' => $toDo->completed,
+            ]);
+
+        $this->assertDatabaseHas(ToDo::class, [
+            'id' => $toDo->getKey(),
+            'title' => $title,
+        ]);
     }
 
     public function testCanDeleteExistingToDo()
     {
-        // Arrange
+        $toDo = ToDo::factory()->create();
 
-        // Act
+        $this->withoutExceptionHandling()
+            ->delete(route('to-dos.destroy', [
+                'id' => $toDo->getKey(),
+            ]))
+            ->assertNoContent();
 
-        // Assert
+        $this->assertDatabaseMissing(ToDo::class, [
+            'id' => $toDo->getKey(),
+        ]);
     }
 }

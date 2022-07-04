@@ -18,4 +18,13 @@ class ToDo extends Model
         'title',
         'completed',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'completed' => 'boolean',
+    ];
 }

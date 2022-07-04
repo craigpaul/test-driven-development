@@ -21,4 +21,18 @@ class ToDoFactory extends Factory
             'completed' => $this->faker->boolean(),
         ];
     }
+
+    /**
+     * Indicate that the ToDo should be currently incomplete.
+     *
+     * @return $this
+     */
+    public function incomplete(): self
+    {
+        return $this->state(function () {
+            return [
+                'completed' => false,
+            ];
+        });
+    }
 }
