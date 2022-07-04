@@ -394,7 +394,9 @@ Huzzah! A passing test! Before we move on, you may or may not see a warning pop 
 
 Now then, let's discuss the fact that this component is currently only able to mark the To Do as completed. That's *pretty* useful, but we can do more to provide the best experience for the end user. *See if you can write another test on your own that will allow for changing the title without breaking the existing test we just wrote*.
 
-If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/JS-3-updating-an-existing-to-do`. You can also see an example solution to allowing changing the title if you switch to `feature/JS-3-updating-the-title-of-an-existing-to-do`.
+Throughout running these tests you may have noticed a `console.log` message appearing regarding the title amount of items in the list and that we should show them. *See if you can write another test on your own that will show the appropriate number of uncompleted items in the footer*.
+
+If you would like to take a look at an example solution to this chapter, feel free to switch to `feature/JS-3-updating-an-existing-to-do`. You can also see an example solution to allowing changing the title if you switch to `feature/JS-3-updating-the-title-of-an-existing-to-do`. You can also see an example solution for showing the amount of uncompleted items if you switch to `feature/JS-3-showing-uncompleted-items-in-the-footer`.
 
 #### 4. Delete an Existing To Do
 
