@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useToDos } from '../contexts/ToDoContext';
 
 function Item({ item }) {
-  const { updateItem } = useToDos();
+  const { removeItem, updateItem } = useToDos();
 
   const inputId = `item-${item.id}`;
   const labelId = `${inputId}-label`;
@@ -20,7 +20,21 @@ function Item({ item }) {
     }).then((item) => {
       updateItem(item);
     });
-  }
+  };
+
+  const handleClick = () => {
+    fetch('/api/to-dos/' + item.id, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+    }).then((response) => {
+      if (response.ok) {
+        removeItem(item);
+      }
+    });
+  };
 
   const handleChange = (event) => {
     fetch('/api/to-dos/' + item.id, {
@@ -89,6 +103,7 @@ function Item({ item }) {
         <button
           aria-label="Delete"
           className="text-gray-300 opacity-0 focus:opacity-100 focus:outline-none group-hover:opacity-100"
+          onClick={handleClick}
           type="button"
         >
           <svg

@@ -23,6 +23,12 @@ function ToDoProvider({ children }) {
     setItems((previousState) => [...previousState, item]);
   };
 
+  const removeItem = (item) => {
+    setItems((previousState) =>
+      previousState.filter((previousItem) => item.id !== previousItem.id),
+    );
+  };
+
   const updateItem = (item) => {
     setItems((previousState) =>
       previousState.map((previousItem) => {
@@ -36,7 +42,7 @@ function ToDoProvider({ children }) {
   };
 
   return (
-    <ToDoContext.Provider value={{ addItem, items, updateItem }}>{children}</ToDoContext.Provider>
+    <ToDoContext.Provider value={{ addItem, items, removeItem, updateItem }}>{children}</ToDoContext.Provider>
   );
 }
 

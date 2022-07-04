@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import setSuccessfulToDoCreation from '../__helpers__/setSuccessfulToDoCreation';
+import setSuccessfulToDoDeletion from '../__helpers__/setSuccessfulToDoDeletion';
 import setSuccessfulToDoFetch from '../__helpers__/setSuccessfulToDoFetch';
 import setSuccessfulToDoUpdate from '../__helpers__/setSuccessfulToDoUpdate';
 import { ToDoProvider } from '../contexts/ToDoContext';
@@ -180,9 +181,35 @@ it('will show the correct amount of uncompleted items', async () => {
 })
 
 it('can delete an existing to do', async () => {
-  // Arrange
+  const [toDo] = setSuccessfulToDoFetch({ count: 1 });
 
-  // Act
+  setSuccessfulToDoDeletion(toDo);
 
-  // Assert
+  render(
+    <ToDoProvider>
+      <App />
+    </ToDoProvider>
+  );
+
+  const list = await screen.findByRole('list');
+  const listItem = within(list).getByRole('listitem', { name: new RegExp(toDo.title, 'i') });
+
+  expect(list).toBeInTheDocument();
+  expect(listItem).toBeInTheDocument();
+
+  const button = within(listItem).getByRole('button', { name: /Delete/i });
+
+  // Using the suggested approach of clicking the checkbox with userEvent is bugged
+  // with the currently installed versions of our testing dependencies. Using the
+  // more low-level implementation of fireEvent prevents this incorrect warning
+  // and produces a successful result.
+  //
+  // https://github.com/testing-library/react-testing-library/issues/1051
+  // userEvent.click(button);
+
+  fireEvent.click(button);
+
+  await waitForElementToBeRemoved(listItem);
+
+  expect(listItem).not.toBeInTheDocument()
 });
