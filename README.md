@@ -51,7 +51,7 @@ Before continuing with our Docker build, we need to ensure Laravel has an applic
 php artisan key:generate
 ```
 
-Once that is complete, you will want to kick off the Docker build steps. Included in this repository is a `develop` script to allow for a similar access pattern to the underlying Docker resources as in other repositories within the Coconut Software organization.
+Once that is complete, you will want to kick off the Docker build steps. Included in this repository is a `develop` script to allow for a slightly simpler access pattern to the underlying Docker resources through provided through Laravel Sail.
 
 ```bash
 ./develop up -d
